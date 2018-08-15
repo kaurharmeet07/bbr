@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}My Base Template{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <style type="text/css">
+        body { padding: 60px; }
+    </style>
+
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <a class="navbar-brand mr-auto mr-lg-0" href="/home">BlogGram</a>
+      <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+
+    <div class="nav-scroller bg-white box-shadow">
+      <nav class="nav nav-underline">
+        <a class="nav-link active" href="/bbricks/loggedin">Dashboard</a>
+        {% block sidebar %}
+          {% endblock %}
+      </nav>
+    </div>
+
+
+
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+
+
+
+ <!--   <div id="page">
+        <div id="sidebar">
+
+                <ul>
+                    <li><a href="/accounts/login/">Home</a></li>
+                </ul>
+
+        </div>
+
+        <div id="content">
+
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+
+
+            <div class="clearfix"></div>
+            <img src="{% static 'assets/images/python-logo.png' %}" width="200" />
+        </div>
+    </div>
+-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

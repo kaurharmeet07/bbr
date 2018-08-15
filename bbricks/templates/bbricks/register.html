@@ -1,0 +1,16 @@
+{% extends 'bbricks/base.html' %}
+
+{% block content %}
+
+    <h2>Register!</h2>
+    <div class="row">
+    <div class="col-6 col-sm-6 col-lg-4">
+    <form action="/bbricks/register/" method="post">{% csrf_token %}
+        {{ form }}
+
+        <input type="submit" value="Register" class="btn btn-primary"/>
+
+    </form>
+</div>
+    </div>
+{% endblock %}
