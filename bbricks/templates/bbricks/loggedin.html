@@ -11,7 +11,7 @@
 
     <h4>Hi {{ user.username }} you are now logged in!</h4>
 
-    <p><img src="{% static {{ user.userprofile.photo }} %}" width="200" /></p>
+    <p><img src="/static/assets/{{ user.userprofile.photo }}" width="200" /></p>
     <p>{{ user.first_name }} {{ user.last_name }}</p>
 
     {% if notifications.count > 0 %}

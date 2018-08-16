@@ -122,10 +122,9 @@ STATIC_ROOT = '/home/harmeet/Music/mysite'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/home/harmeet/Music/mysite/static/',
-]
+STATICFILES_DIRS = (
+    ('assets', '/home/harmeet/Music/mysite/static'),
+)
 
 MEDIA_ROOT = '/home/harmeet/Music/mysite/static/'
 MEDIA_URL = ''
