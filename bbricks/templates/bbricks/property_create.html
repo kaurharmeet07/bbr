@@ -1,0 +1,20 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+            <a class="nav-link" href="/bbricks/loggedin/">Cancel</a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6 col-sm-6 col-lg-4">
+    <form action="/bbricks/create/" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <ul>
+        {{ form.as_ul }}
+        </ul>
+
+        <input type="submit" value="Add Property" class="btn btn-primary"/>
+
+    </form>
+    </div>
+</div>
+{% endblock %}

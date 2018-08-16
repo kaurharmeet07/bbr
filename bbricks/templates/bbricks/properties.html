@@ -1,0 +1,39 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+
+    <ul>
+        <li><a href="/bbricks/all">Properties</a></li>
+        <li><a href="/bbricks/create">Create Property</a></li>
+    </ul>
+
+    <h3>Search</h3>
+    {% csrf_token %}
+    <input type="text" id="search" name="search" />
+
+    <ul id="search-results">
+
+    </ul>
+
+{% endblock %}
+
+{% block content %}
+
+<!--    <h2>Language is: {{ language }}</h2>
+
+    <h2>Session Language is: {{ session_language }}</h2>
+-->
+{% if properties.count > 0 %}
+    {% for property in properties %}
+        <div>
+            <h2><a href="/bbricks/get/{{ property.id }}/">{{ property.description }}</a></h2>
+            <h1>Owner: {{ property.seller.user.username }}</h1>
+            <p>Address: {{ property.address }}</p>
+            <p>Locality: {{ property.locality }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>None to show!</p>
+{% endif %}
+
+{% endblock %}

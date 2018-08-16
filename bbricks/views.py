@@ -1,11 +1,10 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.template.context_processors import csrf
-from .forms import MyRegistrationForm
-from .models import UserProfile
+from .forms import MyRegistrationForm, PropertyForm, UserProfileForm
+from .models import UserProfile, Property
 from django.contrib.auth.decorators import login_required
-from .forms import UserProfileForm
 from django.contrib.auth.models import User
 
 
@@ -97,9 +96,39 @@ def user_profile(request):
 
 def profile(request, username):
     user = User.objects.get(username=username)
-    v = False
-    if request.user.userprofile.follows.all().filter(user_id=user.id):
-        v = True
     return render_to_response('bbricks/profile.html', {'user': user,
-                                                        'properties': user.userprofile.property_set.all(),
-                                                        'v': v})
+                                                       'properties': user.userprofile.property_set.all() })
+
+
+def properties(request):
+    args = {}
+    args.update(csrf(request))
+    args['properties'] = Property.objects.all()
+
+    return render_to_response('bbricks/properties.html', args)
+
+
+def property(request, property_id=1):
+    return render(request, 'bbricks/property.html',
+                  {'property': Property.objects.get(id=property_id)})
+
+
+def create_property(request):
+    if request.POST:
+        form = PropertyForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.seller = request.user.userprofile
+            f.save()
+
+            return HttpResponseRedirect('/bbricks/loggedin')
+    else:
+        form = PropertyForm()
+
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+
+    return render_to_response('bbricks/property_create.html', args)
+
+

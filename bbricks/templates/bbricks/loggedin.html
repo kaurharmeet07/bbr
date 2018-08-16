@@ -23,19 +23,19 @@
 
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <h2 class="border-bottom border-gray pb-2 mb-0">Articles</h2>
- {% if articles.count > 0 %}
-        {% for article in articles %}
+        <h2 class="border-bottom border-gray pb-2 mb-0">Properties</h2>
+ {% if properties.count > 0 %}
+        {% for property in properties %}
         <div class="media text-muted pt-3">
           <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
 
             <div>
-                <h6><a href="/articles/get/{{ article.id }}/">{{ article.title }}</a></h6>
+                <h6><a href="/bbricks/get/{{ property.id }}/">{{ property.description }}</a></h6>
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <a href="/accounts/profile/{{ user.username }}"><strong class="d-block text-gray-dark">@{{ user.username }}</strong></a>
-                    {{ article.body|lower|truncatewords:"10" }}
-                </p>
-                <p>{{ article.likes }} people liked this article</p>
+                    <a href="/bbricks/profile/{{ user.username }}"><strong class="d-block text-gray-dark">@{{ user.username }}</strong></a>
+                                {{ property.address|lower|truncatewords:"10" }}
+                            </p>
+                <p>Price: {{ property.price }}</p>
             </div>
         </div>
      {% endfor %}

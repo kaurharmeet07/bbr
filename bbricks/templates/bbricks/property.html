@@ -1,0 +1,21 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+        <a class="nav-link" href="/bbricks/loggedin/">Your Profile</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-8">
+    <h1>Owner: {{ property.seller.user.username }}</h1>
+    <p>Address: {{ property.address }}</p>
+    <p>Locality: {{ property.locality }}</p>
+    <p>City: {{ property.city }}</p>
+    <p>State: {{ property.state }}</p>
+    <p>Price: {{ property.price }}</p>
+    <p>Bedrooms: {{ property.bedrooms }}</p>
+    <p>Description: {{ property.description }}</p>
+    {% if property.photo %}
+        <p><img src="/static/assets/{{ property.photo }}" width="200" /></p>
+    {% endif %}
+</div>
+{% endblock %}
