@@ -6,7 +6,7 @@
     <div class="row">
     <div class="col-6 col-sm-6 col-lg-4">
     <form action="/bbricks/register/" method="post">{% csrf_token %}
-        {{ form }}
+        {{ form.as_ul }}
 
         <input type="submit" value="Register" class="btn btn-primary"/>
 

@@ -128,3 +128,5 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = '/home/harmeet/Music/mysite/static/'
 MEDIA_URL = ''
+
+LOGIN_URL = '/bbricks/login/'

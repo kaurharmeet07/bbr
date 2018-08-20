@@ -1,0 +1,125 @@
+[
+{
+    "model": "bbricks.state",
+    "pk": 1,
+    "fields": {
+        "state_name": "Punjab"
+    }
+},
+{
+    "model": "bbricks.state",
+    "pk": 2,
+    "fields": {
+        "state_name": "Kerala"
+    }
+},
+{
+    "model": "bbricks.city",
+    "pk": 1,
+    "fields": {
+        "city_name": "Phagwara",
+        "state": 1
+    }
+},
+{
+    "model": "bbricks.city",
+    "pk": 2,
+    "fields": {
+        "city_name": "Calicut",
+        "state": 2
+    }
+},
+{
+    "model": "bbricks.userprofile",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "photo": "uploaded_files/1534364256_553652_har.png",
+        "mobile_no": "9815193606"
+    }
+},
+{
+    "model": "bbricks.userprofile",
+    "pk": 2,
+    "fields": {
+        "user": 3,
+        "photo": "uploaded_files/1534364246_1879156_loki.png",
+        "mobile_no": "9872074226"
+    }
+},
+{
+    "model": "bbricks.userprofile",
+    "pk": 3,
+    "fields": {
+        "user": 4,
+        "photo": "uploaded_files/1534364237_1033943_thor.jpg",
+        "mobile_no": "9872074226"
+    }
+},
+{
+    "model": "bbricks.userprofile",
+    "pk": 4,
+    "fields": {
+        "user": 5,
+        "photo": "uploaded_files/1534364426_9686513_Chris-Hemsworth.jpeg",
+        "mobile_no": "9815193606"
+    }
+},
+{
+    "model": "bbricks.userprofile",
+    "pk": 5,
+    "fields": {
+        "user": 6,
+        "photo": "uploaded_files/1534445110_5555084_IMG_3865.JPG",
+        "mobile_no": "9815193606"
+    }
+},
+{
+    "model": "bbricks.property",
+    "pk": 1,
+    "fields": {
+        "seller": 1,
+        "locality": "New Sukhchain Nagar",
+        "city": 1,
+        "state": 1,
+        "address": "House No. 145, Street No. 6, New Sukhchain Nagar",
+        "bedrooms": 6,
+        "area": 10,
+        "price": 8000,
+        "description": "PG at first floor for girls.",
+        "photo": "uploaded_files/1534438373_1037755_fulkari.png"
+    }
+},
+{
+    "model": "bbricks.property",
+    "pk": 2,
+    "fields": {
+        "seller": 2,
+        "locality": "Jalandhar",
+        "city": 1,
+        "state": 1,
+        "address": "Guru Gobind Singh Avenue",
+        "bedrooms": 5,
+        "area": 15,
+        "price": 10000,
+        "description": "Paying Guest",
+        "photo": "uploaded_files/1534440364_0081837_IMG_3893.JPG"
+    }
+},
+{
+    "model": "bbricks.property",
+    "pk": 3,
+    "fields": {
+        "seller": 5,
+        "locality": "Kattangal",
+        "city": 2,
+        "state": 2,
+        "address": "Room 436, Mega Ladies Hostel, NIT, NIT Calicut",
+        "bedrooms": 2,
+        "area": 6,
+        "price": 7000,
+        "description": "Convenient place for students",
+        "photo": "uploaded_files/1534446616_8261344_IMG_3850.JPG"
+    }
+}
+]

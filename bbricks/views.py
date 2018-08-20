@@ -2,10 +2,11 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.template.context_processors import csrf
-from .forms import MyRegistrationForm, PropertyForm, UserProfileForm
-from .models import UserProfile, Property
+from .forms import MyRegistrationForm, UserProfileForm, ImageForm, ApartmentForm
+from .models import UserProfile, Apartment, Images
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.forms import modelformset_factory
 
 
 def home(request):
@@ -110,25 +111,50 @@ def properties(request):
 
 def property(request, property_id=1):
     return render(request, 'bbricks/property.html',
-                  {'property': Property.objects.get(id=property_id)})
+                  {'property': Apartment.objects.get(id=property_id)})
 
 
+@login_required
 def create_property(request):
+    ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=5)
+
     if request.POST:
-        form = PropertyForm(request.POST, request.FILES)
-        if form.is_valid():
-            f = form.save(commit=False)
-            f.seller = request.user.userprofile
-            f.save()
+        apartmentForm = ApartmentForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=Images.objects.none())
+
+        if apartmentForm.is_valid() and formset.is_valid():
+            apartment_form = apartmentForm.save(commit=False)
+            apartment_form.seller = request.user.userprofile
+            apartment_form.save()
+
+            for f in formset.cleaned_data:
+                image = f['image']
+                photo = Images(property=apartment_form, image=image)
+                photo.save()
 
             return HttpResponseRedirect('/bbricks/loggedin')
+        else:
+            print(apartmentForm.errors, formset.errors)
     else:
-        form = PropertyForm()
+        apartmentForm = ApartmentForm()
+        formset = ImageFormSet(queryset=Images.objects.none())
 
     args = {}
     args.update(csrf(request))
-    args['form'] = form
+    args['apartmentForm'] = apartmentForm
+    args['formset'] = formset
 
     return render_to_response('bbricks/property_create.html', args)
 
 
+def sell(request):
+    pass
+
+
+def rent(request):
+    pass
+
+
+def pg(request):
+    pass

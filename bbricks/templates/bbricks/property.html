@@ -14,8 +14,10 @@
     <p>Price: {{ property.price }}</p>
     <p>Bedrooms: {{ property.bedrooms }}</p>
     <p>Description: {{ property.description }}</p>
-    {% if property.photo %}
-        <p><img src="/static/assets/{{ property.photo }}" width="200" /></p>
+    {% if property.images_set %}
+        {% for image in property.images_set.all %}
+            <p><img src="/static/assets/{{ image.image }}" width="200" /></p>
+        {% endfor %}
     {% endif %}
 </div>
 {% endblock %}
