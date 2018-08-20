@@ -7,13 +7,6 @@
         <li><a href="/bbricks/create">Create Property</a></li>
     </ul>
 
-    <h3>Search</h3>
-    {% csrf_token %}
-    <input type="text" id="search" name="search" />
-
-    <ul id="search-results">
-
-    </ul>
 
 {% endblock %}
 
@@ -23,17 +16,43 @@
 
     <h2>Session Language is: {{ session_language }}</h2>
 -->
-{% if properties.count > 0 %}
-    {% for property in properties %}
-        <div>
-            <h2><a href="/bbricks/get/{{ property.id }}/">{{ property.description }}</a></h2>
-            <h1>Owner: {{ property.seller.user.username }}</h1>
-            <p>Address: {{ property.address }}</p>
-            <p>Locality: {{ property.locality }}</p>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>None to show!</p>
-{% endif %}
+    {% if apartments.count > 0 %}
+        <h1>Apartments</h1>
+        {% for apartment in apartments %}
+            <div>
+                <h3><a href="/bbricks/get_apartment/{{ apartment.property.id }}/">{{ apartment.property.description }}</a></h3>
+                <h4>{{ apartment.property.posted_by }}: {{ apartment.property.seller.user.username }}</h4>
+                <p>Address: {{ apartment.property.address }}</p>
+                <p>Locality: {{ apartment.property.locality }}</p><br>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    {% if houses.count > 0 %}
+        <h1>Independent Houses</h1>
+        {% for house in houses %}
+            <div>
+                <h3><a href="/bbricks/get_house/{{ house.property.id }}/">{{ house.property.description }}</a></h3>
+                <h4>{{ house.property.posted_by }}: {{ house.property.seller.user.username }}</h4>
+                <p>Address: {{ house.property.address }}</p>
+                <p>Locality: {{ house.property.locality }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    {% if lands.count > 0 %}
+        <h1>Lands</h1>
+        {% for land in lands %}
+            <div>
+                <h3><a href="/bbricks/get_land/{{ land.property.id }}/">{{ land.property.description }}</a></h3>
+                <h4>{{ land.property.posted_by }}: {{ land.property.seller.user.username }}</h4>
+                <p>Address: {{ land.property.address }}</p>
+                <p>Locality: {{ land.property.locality }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 
 {% endblock %}

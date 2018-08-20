@@ -1,0 +1,25 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+        <a class="nav-link" href="/bbricks/loggedin/">Your Profile</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-8">
+    <h1>{{ apartment.posted_by }}: {{ apartment.seller.user.username }}</h1>
+    <p>Address: {{ apartment.address }}</p>
+    <p>Locality: {{ apartment.locality }}</p>
+    <p>City: {{ apartment.city }}</p>
+    <p>State: {{ apartment.state }}</p>
+    <p>Area: {{ apartment.area }} {{ apartment.units }}</p>
+    <p>Bedrooms: {{ apartment.bedrooms }}</p>
+    <p>Age: {{ apartment.age }}</p>
+    <p>Price: {{ p.price }}</p>
+    <p>Description: {{ apartment.description }}</p>
+    {% if apartment.images_set %}
+        {% for image in apartment.images_set.all %}
+            <p><img src="/static/assets/{{ image.image }}" width="200" /></p>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

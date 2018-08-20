@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile, Apartment, Villa, Images
+from .models import UserProfile, Apartment, Sell, Images
 
 
 class UserProfileForm(forms.ModelForm):
@@ -34,7 +34,7 @@ class ApartmentForm(forms.ModelForm):
 
     class Meta:
         model = Apartment
-        fields = ('posted_by', 'project_name', 'state', 'city', 'locality', 'address',
+        fields = ('posted_by', 'posted_for', 'project_name', 'state', 'city', 'locality', 'address',
                   'area', 'units', 'bedrooms', 'balconies', 'total_floors', 'property_on_floor',
                   'age', 'parking', 'lift', 'park', 'power_backup',
                   'fire_alarm', 'description', )
@@ -46,3 +46,10 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Images
         fields = ('image', )
+
+
+class SellForm(forms.ModelForm):
+
+    class Meta:
+        model = Sell
+        fields = ('price', )

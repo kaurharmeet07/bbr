@@ -7,7 +7,7 @@
 {% block content %}
 <div class="row">
     <div class="col-6 col-sm-6 col-lg-4">
-    <form id="apartment_form" action="/bbricks/create/" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form id="apartment_form" action="/bbricks/create_apartment/" method="post" enctype="multipart/form-data">{% csrf_token %}
 
         {% for hidden in apartmentForm.hidden_fields %}
             {{ hidden }}

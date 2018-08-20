@@ -1,0 +1,32 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+
+    <ul>
+        <li><a href="/bbricks/all">Properties</a></li>
+        <li><a href="/bbricks/create">Create Property</a></li>
+    </ul>
+
+
+{% endblock %}
+
+{% block content %}
+
+<!--    <h2>Language is: {{ language }}</h2>
+
+    <h2>Session Language is: {{ session_language }}</h2>
+-->
+    {% if properties.count > 0 %}
+        <h1>Properties</h1>
+        {% for property in properties %}
+            <div>
+                <h3>{{ property.description }}</h3>
+                <h4>{{ property.posted_by }}: {{ property.seller.user.username }}</h4>
+                <p>Address: {{ property.address }}</p>
+                <p>Locality: {{ property.locality }}</p><br>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+{% endblock %}

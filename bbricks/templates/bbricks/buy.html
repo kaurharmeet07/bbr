@@ -1,0 +1,24 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+    <a class="nav-link" href="/bbricks/loggedin">Cancel</a>
+{% endblock %}
+
+{% block content %}
+
+    <form action="/bbricks/create/" method="post">{% csrf_token %}
+
+        <label for="type">Property Type: </label>
+        <select name="type" required id="type">
+            <option value selected>---------</option>
+            <option value="apartment">Apartment</option>
+            <option value="independent">Independent House</option>
+            <option value="land">Land</option>
+        </select>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+{% endblock %}

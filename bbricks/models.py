@@ -37,7 +37,12 @@ User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 class Property(models.Model):
     seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    posted_by = models.CharField(max_length=10, choices=[('Owner', 'Owner'), ('Dealer', 'Dealer'), ('Builder', 'Builder')])
+    type = models.CharField(max_length=50, choices=[('Apartment', 'Apartment'), ('Land', 'Land'),
+                                                    ('Independent House', 'Independent House')])
+    posted_for = models.CharField(max_length=50, choices=[('Sale', 'Sale'), ('Rent', 'Rent'),
+                                                          ('Paying Guest', 'Paying Guest')])
+    posted_by = models.CharField(max_length=10, choices=[('Owner', 'Owner'), ('Dealer', 'Dealer'),
+                                                         ('Builder', 'Builder')])
     project_name = models.CharField(max_length=50)
     locality = models.CharField(max_length=50)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -99,8 +104,6 @@ class Land(Property):
 
 class Sell(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50, choices=[('Apartment', 'Apartment'), ('Land', 'Land'),
-                                                    ('Independent House', 'Independent House')])
     price = models.IntegerField()
 
     def __str__(self):
@@ -109,8 +112,6 @@ class Sell(models.Model):
 
 class Rent(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50, choices=[('Apartment', 'Apartment'), ('Land', 'Land'),
-                                                    ('Independent House', 'Independent House')])
     rent_to = models.CharField(max_length=50, choices=[('Family', 'Family'), ('Single Men', 'Single Men'),
                                                        ('Single Women', 'Single Women')])
     available_from = models.DateField()
@@ -126,8 +127,6 @@ class Rent(models.Model):
 
 class PayingGuest(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50, choices=[('Apartment', 'Apartment'), ('Land', 'Land'),
-                                                    ('Independent House', 'Independent House')])
     available_for = models.CharField(max_length=50, choices=[('Girls', 'Girls'), ('Boys', 'Boys'), ('Both', 'Both')])
     suitable_for = models.CharField(max_length=50, choices=[('Students', 'Students'), ('Professionals', 'Professionals')])
     available_from = models.DateField()
@@ -151,6 +150,3 @@ class Images(models.Model):
     property = models.ForeignKey(Property, default=None, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_image_filename,
                               verbose_name='Image')
-
-    def __str__(self):
-        return self.image
