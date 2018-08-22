@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'bbricks/base.html' %}
 
-</body>
-</html>
+{% block sidebar %}
+    <a class="nav-link" href="/bbricks/loggedin">Cancel</a>
+{% endblock %}
+
+{% block content %}
+
+    <form action="/bbricks/rent/{{ property.id }}/" method="post">{% csrf_token %}
+        {{ form.as_ul }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+{% endblock %}

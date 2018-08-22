@@ -3,7 +3,7 @@
 {% block sidebar %}
 
         <a class="nav-link" href="/bbricks/create/">Add property</a>
-        <a class="nav-link" href="/bbricks/buy_sell/">Buy property</a>
+        <a class="nav-link" href="/bbricks/buy/">Buy property</a>
         <a class="nav-link" href="/bbricks/editprofile/">Edit Profile</a>
         <a class="nav-link" href="/bbricks/logout/">Logout</a>
 
@@ -32,7 +32,15 @@
           <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
 
             <div>
+                {% if property.type == 'Apartment' %}
                 <h6><a href="/bbricks/get_apartment/{{ property.id }}/">{{ property.description }}</a></h6>
+                {% endif %}
+                {% if property.type == 'Independent House' %}
+                <h6><a href="/bbricks/get_house/{{ property.id }}/">{{ property.description }}</a></h6>
+                {% endif %}
+                {% if property.type == 'Land' %}
+                <h6><a href="/bbricks/get_land/{{ property.id }}/">{{ property.description }}</a></h6>
+                {% endif %}
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                     <a href="/bbricks/profile/{{ user.username }}"><strong class="d-block text-gray-dark">@{{ user.username }}</strong></a>
                                 {{ property.address|lower|truncatewords:"10" }}

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile, Apartment, Sell, Images
+from .models import UserProfile, Apartment, Sell, Images, Villa, Land, Rent, PayingGuest
 
 
 class UserProfileForm(forms.ModelForm):
@@ -40,6 +40,25 @@ class ApartmentForm(forms.ModelForm):
                   'fire_alarm', 'description', )
 
 
+class HouseForm(forms.ModelForm):
+
+    class Meta:
+        model = Villa
+        fields = ('posted_by', 'posted_for', 'project_name', 'state', 'city', 'locality', 'address',
+                  'area', 'units', 'bedrooms', 'balconies', 'total_floors',
+                  'age', 'parking', 'lift', 'park', 'power_backup',
+                  'water_source', 'overlooking', 'description', )
+
+
+class LandForm(forms.ModelForm):
+
+    class Meta:
+        model = Land
+        fields = ('posted_by', 'project_name', 'state', 'city', 'locality', 'address',
+                  'area', 'units', 'length', 'breadth', 'floors_allowed', 'registered',
+                  'boundary_wall', 'overlooking', 'price_per_merla', 'description', )
+
+
 class ImageForm(forms.ModelForm):
     image = forms.ImageField()
 
@@ -53,3 +72,18 @@ class SellForm(forms.ModelForm):
     class Meta:
         model = Sell
         fields = ('price', )
+
+
+class RentForm(forms.ModelForm):
+
+    class Meta:
+        model = Rent
+        fields = ('rent_to', 'available_from', 'furnishing', 'rent', 'security_deposit')
+
+
+class PGForm(forms.ModelForm):
+
+    class Meta:
+        model = PayingGuest
+        fields = ('available_for', 'available_from', 'furnishing', 'suitable_for', 'rent', 'security_deposit')
+

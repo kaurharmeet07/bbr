@@ -2,8 +2,9 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.template.context_processors import csrf
-from .forms import MyRegistrationForm, UserProfileForm, ImageForm, ApartmentForm, SellForm
-from .models import UserProfile, Apartment, Images, Property, Sell
+from .forms import MyRegistrationForm, UserProfileForm, ImageForm, ApartmentForm, \
+    SellForm, RentForm, PGForm, HouseForm, LandForm
+from .models import UserProfile, Apartment, Images, Property, Sell, Rent, PayingGuest, Villa, Land
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
@@ -106,17 +107,35 @@ def apartment(request, apartment_id=1):
     p = None
     if a.posted_for.__eq__('Sale'):
         p = Sell.objects.get(property=Property.objects.get(id=a.id))
+    if a.posted_for.__eq__('Rent'):
+        p = Rent.objects.get(property=Property.objects.get(id=a.id))
+    if a.posted_for.__eq__('Paying Guest'):
+        p = PayingGuest.objects.get(property=Property.objects.get(id=a.id))
     return render(request, 'bbricks/apartment.html',
                   {'apartment': a,
                    'p': p})
 
 
 def house(request, house_id=1):
-    pass
+    h = Villa.objects.get(id=house_id)
+    p = None
+    if h.posted_for.__eq__('Sale'):
+        p = Sell.objects.get(property=Property.objects.get(id=h.id))
+    if h.posted_for.__eq__('Rent'):
+        p = Rent.objects.get(property=Property.objects.get(id=h.id))
+    if h.posted_for.__eq__('Paying Guest'):
+        p = PayingGuest.objects.get(property=Property.objects.get(id=h.id))
+    return render(request, 'bbricks/house.html',
+                  {'house': h,
+                   'p': p})
 
 
 def land(request, land_id=1):
-    pass
+    l = Land.objects.get(id=land_id)
+    p = Sell.objects.get(property=Property.objects.get(id=l.id))
+    return render(request, 'bbricks/land.html',
+                  {'land': l,
+                   'p': p})
 
 
 def create(request):
@@ -151,8 +170,10 @@ def create_apartment(request):
 
             if apartment_form.posted_for == 'Sale':
                 return HttpResponseRedirect('/bbricks/sell/%s' % apartment_form.id)
-            else:
-                return HttpResponseRedirect('/bbricks/loggedin')
+            if apartment_form.posted_for == 'Rent':
+                return HttpResponseRedirect('/bbricks/rent/%s' % apartment_form.id)
+            if apartment_form.posted_for == 'Paying Guest':
+                return HttpResponseRedirect('/bbricks/pg/%s' % apartment_form.id)
         else:
             print(apartmentForm.errors, formset.errors)
     else:
@@ -168,11 +189,77 @@ def create_apartment(request):
 
 
 def create_house(request):
-    pass
+    ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=2)
+
+    if request.POST:
+        houseForm = HouseForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=Images.objects.none())
+
+        if houseForm.is_valid() and formset.is_valid():
+            house_form = houseForm.save(commit=False)
+            house_form.seller = request.user.userprofile
+            house_form.type = 'Independent House'
+            house_form.save()
+
+            for f in formset.cleaned_data:
+                image = f['image']
+                photo = Images(property=house_form, image=image)
+                photo.save()
+
+            if house_form.posted_for == 'Sale':
+                return HttpResponseRedirect('/bbricks/sell/%s' % house_form.id)
+            if house_form.posted_for == 'Rent':
+                return HttpResponseRedirect('/bbricks/rent/%s' % house_form.id)
+            if house_form.posted_for == 'Paying Guest':
+                return HttpResponseRedirect('/bbricks/pg/%s' % house_form.id)
+        else:
+            print(houseForm.errors, formset.errors)
+    else:
+        houseForm = HouseForm()
+        formset = ImageFormSet(queryset=Images.objects.none())
+
+    args = {}
+    args.update(csrf(request))
+    args['houseForm'] = houseForm
+    args['formset'] = formset
+
+    return render_to_response('bbricks/create_house.html', args)
 
 
 def create_land(request):
-    pass
+    ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=2)
+
+    if request.POST:
+        landForm = LandForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=Images.objects.none())
+
+        if landForm.is_valid() and formset.is_valid():
+            land_form = landForm.save(commit=False)
+            land_form.seller = request.user.userprofile
+            land_form.type = 'Land'
+            land_form.posted_for = 'Sale'
+            land_form.save()
+
+            for f in formset.cleaned_data:
+                image = f['image']
+                photo = Images(property=land_form, image=image)
+                photo.save()
+
+            return HttpResponseRedirect('/bbricks/sell/%s' % land_form.id)
+        else:
+            print(landForm.errors, formset.errors)
+    else:
+        landForm = LandForm()
+        formset = ImageFormSet(queryset=Images.objects.none())
+
+    args = {}
+    args.update(csrf(request))
+    args['landForm'] = landForm
+    args['formset'] = formset
+
+    return render_to_response('bbricks/create_land.html', args)
 
 
 def sell(request, property_id):
@@ -185,8 +272,12 @@ def sell(request, property_id):
                 s.property = p
                 s.save()
 
-                return HttpResponseRedirect('/bbricks/get_apartment/%s' % property_id)
-
+                if p.type.__eq__('Apartment'):
+                    return HttpResponseRedirect('/bbricks/get_apartment/%s' % property_id)
+                if p.type.__eq__('Independent House'):
+                    return HttpResponseRedirect('/bbricks/get_house/%s' % property_id)
+                if p.type.__eq__('Land'):
+                    return HttpResponseRedirect('/bbricks/get_land/%s' % property_id)
         else:
             form = SellForm()
 
@@ -197,12 +288,52 @@ def sell(request, property_id):
         return render_to_response('bbricks/sell.html', args)
 
 
-def rent(request):
-    pass
+def rent(request, property_id):
+    if property_id:
+        p = Property.objects.get(id=property_id)
+        if request.POST:
+            form = RentForm(request.POST)
+            if form.is_valid():
+                s = form.save(commit=False)
+                s.property = p
+                s.save()
+
+                if p.type.__eq__('Apartment'):
+                    return HttpResponseRedirect('/bbricks/get_apartment/%s' % property_id)
+                if p.type.__eq__('Independent House'):
+                    return HttpResponseRedirect('/bbricks/get_house/%s' % property_id)
+        else:
+            form = RentForm()
+
+        args = {}
+        args.update(csrf(request))
+        args['form'] = form
+        args['property'] = p
+        return render_to_response('bbricks/rent.html', args)
 
 
-def pg(request):
-    pass
+def pg(request, property_id):
+    if property_id:
+        p = Property.objects.get(id=property_id)
+        if request.POST:
+            form = PGForm(request.POST)
+            if form.is_valid():
+                s = form.save(commit=False)
+                s.property = p
+                s.save()
+
+                if p.type.__eq__('Apartment'):
+                    return HttpResponseRedirect('/bbricks/get_apartment/%s' % property_id)
+                if p.type.__eq__('Independent House'):
+                    return HttpResponseRedirect('/bbricks/get_house/%s' % property_id)
+        else:
+            form = PGForm()
+
+        args = {}
+        args.update(csrf(request))
+        args['form'] = form
+        args['property'] = p
+        return render_to_response('bbricks/pg.html', args)
 
 
 def buy_sell(request):
@@ -229,3 +360,28 @@ def properties(request):
     args['properties'] = Property.objects.all()
 
     return render_to_response('bbricks/all.html', args)
+
+
+def buy(request):
+    if request.method == 'POST':
+        t = request.POST.get('posted_for')
+        args = {}
+        args.update(csrf(request))
+        if t == 'sale':
+            args['apartments'] = Sell.objects.filter(property__posted_for='Sale', property__type='Apartment')
+            args['houses'] = Sell.objects.filter(property__posted_for='Sale', property__type='Independent House')
+            args['lands'] = Sell.objects.filter(property__posted_for='Sale', property__type='Land')
+
+        if t == 'rent':
+            args['apartments'] = Rent.objects.filter(property__posted_for='Rent', property__type='Apartment')
+            args['houses'] = Rent.objects.filter(property__posted_for='Rent', property__type='Independent House')
+
+        if t == 'pg':
+            args['apartments'] = PayingGuest.objects.filter(property__posted_for='Paying Guest', property__type='Apartment')
+            args['houses'] = PayingGuest.objects.filter(property__posted_for='Paying Guest', property__type='Independent House')
+
+        return render_to_response('bbricks/properties.html', args)
+    else:
+        args = {}
+        args.update(csrf(request))
+        return render_to_response('bbricks/buy.html', args)

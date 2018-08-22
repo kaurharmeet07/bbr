@@ -7,7 +7,7 @@
 {% block content %}
 
     <form action="/bbricks/sell/{{ property.id }}/" method="post">{% csrf_token %}
-        {{ form }}
+        {{ form.as_ul }}
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

@@ -6,14 +6,14 @@
 
 {% block content %}
 
-    <form action="/bbricks/create/" method="post">{% csrf_token %}
+    <form action="/bbricks/buy/" method="post">{% csrf_token %}
 
-        <label for="type">Property Type: </label>
-        <select name="type" required id="type">
+        <label for="posted_for">Posted For: </label>
+        <select name="posted_for" required id="posted_for">
             <option value selected>---------</option>
-            <option value="apartment">Apartment</option>
-            <option value="independent">Independent House</option>
-            <option value="land">Land</option>
+            <option value="sale">Sale</option>
+            <option value="rent">Rent</option>
+            <option value="pg">Paying Guest</option>
         </select>
 
         <div class="form-actions">

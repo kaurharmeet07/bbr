@@ -14,7 +14,15 @@
     <p>Area: {{ apartment.area }} {{ apartment.units }}</p>
     <p>Bedrooms: {{ apartment.bedrooms }}</p>
     <p>Age: {{ apartment.age }}</p>
-    <p>Price: {{ p.price }}</p>
+    {% if apartment.posted_for == 'Sale' %}
+        <p>Price: {{ p.price }}</p>
+    {% endif %}
+    {% if apartment.posted_for == 'Rent' %}
+        <p>Rent: {{ p.rent }}</p>
+    {% endif %}
+    {% if apartment.posted_for == 'Paying Guest' %}
+        <p>Rent: {{ p.rent }}</p>
+    {% endif %}
     <p>Description: {{ apartment.description }}</p>
     {% if apartment.images_set %}
         {% for image in apartment.images_set.all %}

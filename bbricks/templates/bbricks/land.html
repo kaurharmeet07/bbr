@@ -1,0 +1,26 @@
+{% extends 'bbricks/base.html' %}
+
+{% block sidebar %}
+        <a class="nav-link" href="/bbricks/loggedin/">Your Profile</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-8">
+    <h1>{{ land.posted_by }}: {{ land.seller.user.username }}</h1>
+    <p>Address: {{ land.address }}</p>
+    <p>Locality: {{ land.locality }}</p>
+    <p>City: {{ land.city }}</p>
+    <p>State: {{ land.state }}</p>
+    <p>Area: {{ land.area }} {{ land.units }}</p>
+    <p>Length: {{ land.length }}</p>
+    <p>Breadth: {{ land.breadth }}</p>
+    <p>Price per marla: {{ land.price_per_merla }}</p>
+    <p>Price: {{ p.price }}</p>
+    <p>Description: {{ land.description }}</p>
+    {% if land.images_set %}
+        {% for image in land.images_set.all %}
+            <p><img src="/static/assets/{{ image.image }}" width="200" /></p>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
