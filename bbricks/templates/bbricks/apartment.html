@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-md-8">
+<div id="view-property" class="col-lg-12 property-nodule jumbotron" >
     <h1>{{ apartment.posted_by }}: {{ apartment.seller.user.username }}</h1>
-    <p>Address: {{ apartment.address }}</p>
+    <p>Address: <span class="location">{{ apartment.address }}</span></p>
     <p>Locality: {{ apartment.locality }}</p>
     <p>City: {{ apartment.city }}</p>
     <p>State: {{ apartment.state }}</p>
@@ -24,6 +24,7 @@
         <p>Rent: {{ p.rent }}</p>
     {% endif %}
     <p>Description: {{ apartment.description }}</p>
+    <div class="map" id="map-canvas" style="width: 480px; height: 480px"></div><br>
     {% if apartment.images_set %}
         {% for image in apartment.images_set.all %}
             <p><img src="/static/assets/{{ image.image }}" width="200" /></p>

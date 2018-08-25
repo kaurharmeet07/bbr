@@ -6,14 +6,17 @@
 
 {% block content %}
 
-    <form action="/bbricks/buy/" method="post">{% csrf_token %}
+    <form action="/bbricks/buy_rent/" method="post">{% csrf_token %}
 
         <label for="city">City: </label>
         <input type="text" name="city" required id="city">
 
-        <label>Price Range: </label>
+        <input type="radio" name="rent_pg" value="rent" checked> Rent<br>
+        <input type="radio" name="rent_pg" value="pg"> PG<br>
+
+        <label>Rent Range: </label>
         <label for="max">Maximum: </label>
-        <input type="number" name="max" required id="max" value="10000000">
+        <input type="number" name="max" required id="max" value="1000000">
 
         <label for="min">Minimum: </label>
         <input type="number" name="min" required id="min" value="0">

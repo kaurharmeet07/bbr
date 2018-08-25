@@ -26,7 +26,5 @@ urlpatterns = [
     url(r'^rent/(?P<property_id>\d+)/$', views.rent),
     url(r'^pg/(?P<property_id>\d+)/$', views.pg),
     url(r'^buy/$', views.buy),
-    url(r'^buy_sell/$', views.buy_sell),
     url(r'^buy_rent/$', views.buy_rent),
-    url(r'^buy_pg/$', views.buy_pg),
 ]

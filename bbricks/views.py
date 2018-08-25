@@ -346,14 +346,6 @@ def buy_sell(request):
     return render_to_response('bbricks/properties.html', args)
 
 
-def buy_rent(request):
-    pass
-
-
-def buy_pg(request):
-    pass
-
-
 def properties(request):
     args = {}
     args.update(csrf(request))
@@ -364,24 +356,64 @@ def properties(request):
 
 def buy(request):
     if request.method == 'POST':
-        t = request.POST.get('posted_for')
+        bedrooms = request.POST.get('bedrooms')
+        city = request.POST.get('city')
+        min = request.POST.get('min')
+        max = request.POST.get('max')
         args = {}
         args.update(csrf(request))
-        if t == 'sale':
-            args['apartments'] = Sell.objects.filter(property__posted_for='Sale', property__type='Apartment')
-            args['houses'] = Sell.objects.filter(property__posted_for='Sale', property__type='Independent House')
-            args['lands'] = Sell.objects.filter(property__posted_for='Sale', property__type='Land')
-
-        if t == 'rent':
-            args['apartments'] = Rent.objects.filter(property__posted_for='Rent', property__type='Apartment')
-            args['houses'] = Rent.objects.filter(property__posted_for='Rent', property__type='Independent House')
-
-        if t == 'pg':
-            args['apartments'] = PayingGuest.objects.filter(property__posted_for='Paying Guest', property__type='Apartment')
-            args['houses'] = PayingGuest.objects.filter(property__posted_for='Paying Guest', property__type='Independent House')
+        args['apartments'] = Sell.objects.filter(property__posted_for='Sale', property__type='Apartment',
+                                                 property__sell__price__gte=min, property__sell__price__lte=max,
+                                                 property__city__city_name=city)
+        args['houses'] = Sell.objects.filter(property__posted_for='Sale', property__type='Independent House',
+                                             property__sell__price__gte=min, property__sell__price__lte=max,
+                                             property__city__city_name=city)
+        args['lands'] = Sell.objects.filter(property__posted_for='Sale', property__type='Land',
+                                            property__sell__price__gte=min, property__sell__price__lte=max,
+                                            property__city__city_name=city)
+        args['bedrooms'] = bedrooms
 
         return render_to_response('bbricks/properties.html', args)
     else:
         args = {}
         args.update(csrf(request))
         return render_to_response('bbricks/buy.html', args)
+
+
+def buy_rent(request):
+    if request.method == 'POST':
+        t = request.POST.get('rent_pg')
+        city = request.POST.get('city')
+        bedrooms = request.POST.get('bedrooms')
+        min = request.POST.get('min')
+        max = request.POST.get('max')
+        args = {}
+        args.update(csrf(request))
+        if t == 'rent':
+            args['apartments'] = Rent.objects.filter(property__posted_for='Rent', property__type='Apartment',
+                                                     property__rent__rent__gte=min, property__rent__rent__lte=max,
+                                                     property__city__city_name=city)
+            args['houses'] = Rent.objects.filter(property__posted_for='Rent', property__type='Independent House',
+                                                 property__rent__rent__gte=min, property__rent__rent__lte=max,
+                                                 property__city__city_name=city)
+
+        if t == 'pg':
+            args['apartments'] = PayingGuest.objects.filter(property__posted_for='Paying Guest',
+                                                            property__type='Apartment',
+                                                            property__payingguest__rent__gte=min,
+                                                            property__payingguest__rent__lte=max,
+                                                            property__city__city_name=city)
+            args['houses'] = PayingGuest.objects.filter(property__posted_for='Paying Guest',
+                                                        property__type='Independent House',
+                                                        property__payingguest__rent__gte=min,
+                                                        property__payingguest__rent__lte=max,
+                                                        property__city__city_name=city)
+
+        args['bedrooms'] = bedrooms
+
+        return render_to_response('bbricks/properties.html', args)
+    else:
+        args = {}
+        args.update(csrf(request))
+        return render_to_response('bbricks/buy_rent_pg.html', args)
+
